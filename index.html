@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astaar Bets - IPL 3D Predictions & Betting</title>
+    <link rel="stylesheet" href="styles_Version2.css">
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🏏</span>
+                <span class="logo-text">Astaar Bets</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="#teams" class="nav-link">Teams</a></li>
+                <li class="nav-item"><a href="#matches" class="nav-link">Matches</a></li>
+                <li class="nav-item"><a href="#predictions" class="nav-link">Predictions</a></li>
+                <li class="nav-item"><a href="#betting" class="nav-link">Betting</a></li>
+                <li class="nav-item"><a href="#winner" class="nav-link">Winner</a></li>
+                <li class="nav-item"><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
+            </ul>
+            <div class="nav-balance">
+                <span class="coin-icon">💰</span>
+                <span id="balance-display">₹10,000</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 3D Stadium Canvas -->
+    <div id="3d-canvas"></div>
+
+    <!-- Home Section -->
+    <section id="home" class="section hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-stars">
+                <span class="star" style="--i:0">⭐</span>
+                <span class="star" style="--i:1">⭐</span>
+                <span class="star" style="--i:2">⭐</span>
+            </div>
+            <h1 class="title-main">ASTAAR BETS</h1>
+            <p class="subtitle">The Ultimate IPL Experience</p>
+            <p class="description">Predict • Bet • Win 🏏 Experience the thrill of IPL with immersive 3D cricket stadiums, AI-powered match predictions, and exciting betting simulations using virtual coins!</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary glow" onclick="scrollToSection('teams')">
+                    <i class="fas fa-users"></i> Explore Teams
+                </button>
+                <button class="btn btn-secondary glow" onclick="scrollToSection('matches')">
+                    <i class="fas fa-fire"></i> View Matches
+                </button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-box">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Teams</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Matches</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">₹10K</div>
+                    <div class="stat-label">Start Capital</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teams Section -->
+    <section id="teams" class="section teams-section">
+        <div class="section-header">
+            <h2 class="section-title">IPL TEAMS 2026</h2>
+            <p class="section-subtitle">All 10 Teams at Your Fingertips</p>
+            <div class="title-divider"></div>
+        </div>
+        <div class="teams-container" id="teams-container">
+            <!-- Teams dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Matches Section -->
+    <section id="matches" class="section matches-section">
+        <div class="section-header">
+            <h2 class="section-title">UPCOMING MATCHES</h2>
+            <p class="section-subtitle">IPL 2026 Schedule</p>
+            <div class="title-divider"></div>
+        </div>
+        <div class="matches-container" id="matches-container">
+            <!-- Matches dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Predictions Section -->
+    <section id="predictions" class="section predictions-section">
+        <div class="section-header">
+            <h2 class="section-title">MATCH PREDICTIONS</h2>
+            <p class="section-subtitle">AI-Powered Win Probability Analysis</p>
+            <div class="title-divider"></div>
+        </div>
+        <div class="predictions-container" id="predictions-container">
+            <!-- Predictions dynamically loaded -->
+        </div>
+    </section>
+
+    <!-- Betting Section -->
+    <section id="betting" class="section betting-section">
+        <div class="section-header">
+            <h2 class="section-title">PLACE YOUR BETS</h2>
+            <p class="section-subtitle">Virtual Coins • No Real Money</p>
+            <div class="title-divider"></div>
+        </div>
+        <div class="betting-container">
+            <div class="bet-card premium">
+                <div class="card-header">
+                    <h3><i class="fas fa-wallet"></i> Current Balance</h3>
+                </div>
+                <p class="bet-balance" id="bet-balance">₹10,000</p>
+                <div class="balance-bar">
+                    <div class="balance-fill" id="balance-fill" style="width: 100%"></div>
+                </div>
+                <button class="btn btn-secondary" onclick="resetBalance()">
+                    <i class="fas fa-redo"></i> Reset Balance
+                </button>
+            </div>
+
+            <div class="bet-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list"></i> Active Bets</h3>
+                    <span class="badge" id="active-count">0</span>
+                </div>
+                <div id="active-bets-list" class="bets-scroll">
+                    <p class="empty-state">
+                        <i class="fas fa-inbox"></i> No active bets
+                    </p>
+                </div>
+            </div>
+
+            <div class="bet-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-history"></i> Recent Results</h3>
+                    <span class="badge" id="history-count">0</span>
+                </div>
+                <div id="recent-results-list" class="bets-scroll">
+                    <p class="empty-state">
+                        <i class="fas fa-inbox"></i> No betting history
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IPL 2026 Winner Section -->
+    <section id="winner" class="section winner-section">
+        <div class="section-header">
+            <h2 class="section-title">IPL 2026 CHAMPION</h2>
+            <p class="section-subtitle">Predict the Tournament Winner</p>
+            <div class="title-divider"></div>
+        </div>
+        <div class="winner-container">
+            <div class="winner-grid" id="winner-grid">
+                <!-- Teams dynamically loaded -->
+            </div>
+            <div class="winner-selection">
+                <h3><i class="fas fa-star"></i> Your Selection</h3>
+                <div id="winner-selection-display" class="winner-display">
+                    <p><i class="fas fa-hand-point-up"></i> Select a team to predict</p>
+                </div>
+                <button class="btn btn-primary" onclick="submitWinnerPrediction()" style="margin-top: 20px; width: 100%;">
+                    <i class="fas fa-check"></i> Submit Prediction
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section id="leaderboard" class="section leaderboard-section">
+        <div class="section-header">
+            <h2 class="section-title">LEADERBOARD</h2>
+            <p class="section-subtitle">Top Performers This Season</p>
+            <div class="title-divider"></div>
+        </div>
+        <div class="leaderboard-wrapper">
+            <div class="leaderboard-container">
+                <table class="leaderboard-table" id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">
+                                <i class="fas fa-crown"></i> Rank
+                            </th>
+                            <th class="name-col">Player Name</th>
+                            <th class="coins-col">
+                                <i class="fas fa-coins"></i> Coins
+                            </th>
+                            <th class="bets-col">
+                                <i class="fas fa-dice"></i> Bets
+                            </th>
+                            <th class="rate-col">
+                                <i class="fas fa-percent"></i> Win Rate
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Leaderboard data dynamically loaded -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Betting Modal -->
+    <div id="betting-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('betting-modal')"><i class="fas fa-times"></i></span>
+            <h2 id="modal-title">Place Your Bet</h2>
+            <div id="modal-body">
+                <!-- Dynamic content loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification">
+        <span id="notification-icon"></span>
+        <span id="notification-text"></span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Astaar Bets</h4>
+                <p>The ultimate IPL betting simulation platform with 3D stadium experience.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#teams">Teams</a></li>
+                    <li><a href="#matches">Matches</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Important</h4>
+                <p>⚠️ This is a simulation using virtual currency only. No real money involved.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Astaar Bets. All rights reserved. Built for cricket enthusiasts.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="data_Version2.js"></script>
+    <script src="script_Version2.js"></script>
+</body>
+</html>
